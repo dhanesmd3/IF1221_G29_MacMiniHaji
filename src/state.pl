@@ -43,7 +43,7 @@ minta_nama_pemain(N, Acc, Hasil) :-
     N > 0,
     hitung_panjang(Acc, Pos0),
     Pos is Pos0 + 1,
-    format('Masukkan nama pemain ~w (awali huruf besar, contoh: Malik): ', [Pos]),
+    format('Masukkan nama pemain ~w (gunakan petik '', contoh: 'Malik'): ', [Pos]),
     read(Nama),
     ( cek_member(Nama, Acc)
     ->  write('Nama sudah digunakan. Masukkan nama lain: '),
