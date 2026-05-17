@@ -27,10 +27,14 @@ startGame :-
     format('Giliran ~w.~n', [PemainPertama]).
 
 
+jumlah_valid(2).
+jumlah_valid(3).
+jumlah_valid(4).
+
 minta_jumlah_pemain(N) :-
     write('Masukkan jumlah pemain: '),
     read(Input),
-    ( integer(Input), Input >= 2, Input =< 4
+    ( jumlah_valid(Input)
     ->  N = Input
     ;   write('Mohon masukkan angka antara 2 - 4.'), nl,
         minta_jumlah_pemain(N)
