@@ -1,4 +1,4 @@
-% CEK ANGKA
+% mengecek angka
 
 is_angka(0). is_angka(1). is_angka(2). is_angka(3). is_angka(4).
 is_angka(5). is_angka(6). is_angka(7). is_angka(8). is_angka(9).
@@ -19,7 +19,7 @@ kumpul_kartu([
     kartu(hitam,wild_draw_four)
 ]).
 
-% JENIS KARTU
+% jenis jenis kartu
 
 kartu_angka(kartu(_, J)) :- is_angka(J).
 kartu_aksi(kartu(_, skip)).
@@ -28,10 +28,10 @@ kartu_aksi(kartu(_, draw_two)).
 kartu_wild(kartu(hitam, wild)).
 kartu_wild(kartu(hitam, wild_draw_four)).
 
-% kartu yang boleh jadi awal discard pile (hanya kartu angka)
+% kartu yang boleh jadi awal discard pile
 kartu_awal_valid(K) :- kartu_angka(K).
 
-% NILAI KARTU (untuk hitung poin)
+% nilai kartu
 
 nilai_kartu(kartu(_, J), J)  :- is_angka(J), !.
 nilai_kartu(kartu(_, skip),               10).
@@ -40,7 +40,7 @@ nilai_kartu(kartu(_, draw_two),           10).
 nilai_kartu(kartu(hitam, wild),           20).
 nilai_kartu(kartu(hitam, wild_draw_four), 20).
 
-% AMBIL KARTU ACAK DARI DECK
+% mengambil kartu secara acak dari deck
 
 kartu_acak(K) :-
     kumpul_kartu(SemuaKartu),
@@ -49,7 +49,7 @@ kartu_acak(K) :-
     Idx1 is Idx + 1,
     ambil_ke(Idx1, SemuaKartu, K).
 
-% DISTRIBUSI KARTU
+% distribusi kartu
 
 distribusiKartu :-
     urutan_pemain(ListPemain),
@@ -61,7 +61,7 @@ bagikan_ke_semua([Pemain|Rest]) :-
     assertz(kartu_pemain(Pemain, TujuhKartu)),
     bagikan_ke_semua(Rest).
 
-% ambil N kartu acak, simpan di Acc
+% ambil N kartu secara acak (disimpan di Acc)
 ambil_kartu_acak(0, Acc, Acc) :- !.
 ambil_kartu_acak(N, Acc, Hasil) :-
     N > 0,
@@ -69,7 +69,7 @@ ambil_kartu_acak(N, Acc, Hasil) :-
     N1 is N - 1,
     ambil_kartu_acak(N1, [K|Acc], Hasil).
 
-% INISIALISASI DISCARD PILE
+% inisialisasi discard pile
 
 inisialisasiDiscardPile :-
     kartu_acak(K),
