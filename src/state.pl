@@ -178,7 +178,6 @@ hitung_poin_semua([Pemain|Rest]) :-
     ),
     hitung_poin_semua(Rest).
 
-% tampilkan detail poin seperti "william: merah-5 + biru-3 = 8 poin"
 tampilkan_detail_poin(Pemain, ListKartu, Total) :-
     write(Pemain), write(': '),
     tampilkan_kartu_poin(ListKartu),
