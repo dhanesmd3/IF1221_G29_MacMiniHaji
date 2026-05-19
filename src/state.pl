@@ -153,7 +153,6 @@ pilih_warna_baru :-
     ).
 
 % END GAME
-% Dipanggil otomatis saat ada pemain yang kartunya habis.
 
 endGame :-
     urutan_pemain(Urutan),
@@ -196,7 +195,6 @@ hitung_total_poin([K|Rest], Total) :-
     hitung_total_poin(Rest, TotalRest),
     Total is Poin + TotalRest.
 
-% kumpulkan poin semua pemain ke list poin(Total, Nama)
 kumpul_poin_semua([], []).
 kumpul_poin_semua([Pemain|Rest], [poin(Total, Pemain)|RestPoin]) :-
     kartu_pemain(Pemain, ListKartu),
