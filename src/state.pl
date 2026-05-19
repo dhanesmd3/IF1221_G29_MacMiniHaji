@@ -8,6 +8,7 @@
 :- dynamic(status_uni/1).
 :- dynamic(efek_aktif/1).
 :- dynamic(discard_sebelum_wdf/1).
+:- dynamic(warna_sebelum_wdf/1).
 
 % START GAME
 
@@ -84,7 +85,8 @@ bersihkan_state :-
     retractall(kartu_pemain(_, _)),
     retractall(status_uni(_)),
     retractall(efek_aktif(_)),
-    retractall(discard_sebelum_wdf(_)).
+    retractall(discard_sebelum_wdf(_)),
+    retractall(warna_sebelum_wdf(_)).
 
 % PINDAH GILIRAN
 

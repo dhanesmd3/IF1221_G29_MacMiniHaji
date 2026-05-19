@@ -59,6 +59,9 @@ terapkan_efek(kartu(hitam, wild_draw_four)) :- !,
     discard_top(KartuSebelumnya),
     retractall(discard_sebelum_wdf(_)),
     assertz(discard_sebelum_wdf(KartuSebelumnya)),
+    warna_aktif(WarnaLama),
+    retractall(warna_sebelum_wdf(_)),
+    assertz(warna_sebelum_wdf(WarnaLama)),
     pilih_warna_baru,
     retractall(efek_aktif(_)),
     assertz(efek_aktif(wild_draw_four)),
@@ -111,36 +114,43 @@ tantang :-
     cari_pemain_berikut(Penantang, Urutan, ArahBalik, Tertantang),
     format('Memeriksa kartu ~w...~n', [Tertantang]),
     kartu_pemain(Tertantang, ListKartuTertantang),
-    discard_sebelum_wdf(kartu(WarnaSebelum, JenisSebelum)),
-    ( ada_kartu_cocok_tantang(ListKartuTertantang, WarnaSebelum, JenisSebelum) ->
-        ambil_kartu_acak(4, [], EmpatKartu),
-        kartu_pemain(Tertantang, ListLama),
-        gabung_list(EmpatKartu, ListLama, ListBaru),
-        retract(kartu_pemain(Tertantang, ListLama)),
-        assertz(kartu_pemain(Tertantang, ListBaru)),
-        retractall(efek_aktif(_)),
-        assertz(efek_aktif(none)),
-        format('Tantangan berhasil! ~w mendapatkan 4 kartu acak.~n', [Tertantang]),
-        next_turn
-    ;
-        ambil_kartu_acak(6, [], EnamKartu),
-        kartu_pemain(Penantang, ListLamaPenantang),
-        gabung_list(EnamKartu, ListLamaPenantang, ListBaruPenantang),
-        retract(kartu_pemain(Penantang, ListLamaPenantang)),
-        assertz(kartu_pemain(Penantang, ListBaruPenantang)),
-        retractall(efek_aktif(_)),
-        assertz(efek_aktif(none)),
-        format('Tantangan gagal. ~w mendapatkan 6 kartu acak.~n', [Penantang]),
-        next_turn
-    ).
+    warna_sebelum_wdf(WarnaSebelum),
+    discard_sebelum_wdf(kartu(_, JenisSebelum)),
+    proses_tantang(ListKartuTertantang, WarnaSebelum, JenisSebelum, Penantang, Tertantang).
 
-ada_kartu_cocok_tantang([kartu(hitam,wild_draw_four)|Rest], W, J) :- ada_kartu_cocok_tantang(Rest, W, J).
+tantang :- write('Tidak ada wild draw four yang bisa ditantang.'), nl.
+
+% Tantangan berhasil: tertantang punya kartu yang seharusnya bisa dimainkan
+proses_tantang(ListKartuTertantang, WarnaSebelum, JenisSebelum, _Penantang, Tertantang) :-
+    ada_kartu_cocok_tantang(ListKartuTertantang, WarnaSebelum, JenisSebelum),
+    !,
+    ambil_kartu_acak(4, [], EmpatKartu),
+    kartu_pemain(Tertantang, ListLama),
+    gabung_list(EmpatKartu, ListLama, ListBaru),
+    retract(kartu_pemain(Tertantang, ListLama)),
+    assertz(kartu_pemain(Tertantang, ListBaru)),
+    retractall(efek_aktif(_)),
+    assertz(efek_aktif(none)),
+    format('Tantangan berhasil! ~w mendapatkan 4 kartu acak.~n', [Tertantang]),
+    next_turn.
+
+% Tantangan gagal: tertantang memang tidak punya kartu yang cocok
+proses_tantang(_ListKartuTertantang, _WarnaSebelum, _JenisSebelum, Penantang, _Tertantang) :-
+    ambil_kartu_acak(6, [], EnamKartu),
+    kartu_pemain(Penantang, ListLamaPenantang),
+    gabung_list(EnamKartu, ListLamaPenantang, ListBaruPenantang),
+    retract(kartu_pemain(Penantang, ListLamaPenantang)),
+    assertz(kartu_pemain(Penantang, ListBaruPenantang)),
+    retractall(efek_aktif(_)),
+    assertz(efek_aktif(none)),
+    format('Tantangan gagal. ~w mendapatkan 6 kartu acak.~n', [Penantang]),
+    next_turn.
+
+ada_kartu_cocok_tantang([kartu(hitam,wild_draw_four)|Rest], W, J) :- !, ada_kartu_cocok_tantang(Rest, W, J).
 ada_kartu_cocok_tantang([kartu(hitam, wild)|_], _, _) :- !.
 ada_kartu_cocok_tantang([kartu(W, _)|_], W, _) :- !.
 ada_kartu_cocok_tantang([kartu(_, J)|_], _, J) :- !.
 ada_kartu_cocok_tantang([_|Rest], W, J) :- ada_kartu_cocok_tantang(Rest, W, J).
-
-tantang :- write('Tidak ada wild draw four yang bisa ditantang.'), nl.
 
 punya_kartu_cocok_tantang([K|_]) :- K \= kartu(hitam, wild_draw_four), bisa_dimainkan_non_wdf(K), !.
 punya_kartu_cocok_tantang([_|Rest]) :- punya_kartu_cocok_tantang(Rest).
