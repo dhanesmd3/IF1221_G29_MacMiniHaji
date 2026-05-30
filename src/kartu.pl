@@ -16,7 +16,8 @@ kumpul_kartu([
     kartu(merah,reverse), kartu(kuning,reverse),kartu(hijau,reverse),kartu(biru,reverse),
     kartu(merah,draw_two),kartu(kuning,draw_two),kartu(hijau,draw_two),kartu(biru,draw_two),
     kartu(hitam,wild),
-    kartu(hitam,wild_draw_four)
+    kartu(hitam,wild_draw_four),
+    kartu(hitam,mimic)
 ]).
 
 % jenis jenis kartu
@@ -27,18 +28,21 @@ kartu_aksi(kartu(_, reverse)).
 kartu_aksi(kartu(_, draw_two)).
 kartu_wild(kartu(hitam, wild)).
 kartu_wild(kartu(hitam, wild_draw_four)).
+kartu_mimic(kartu(hitam, mimic)).
 
 % kartu yang boleh jadi awal discard pile
 kartu_awal_valid(K) :- kartu_angka(K).
 
 % nilai kartu
 
+nilai_kartu(kartu(_, 0), 1)  :- !.
 nilai_kartu(kartu(_, J), J)  :- is_angka(J), !.
 nilai_kartu(kartu(_, skip),               10).
 nilai_kartu(kartu(_, reverse),            10).
 nilai_kartu(kartu(_, draw_two),           10).
 nilai_kartu(kartu(hitam, wild),           20).
 nilai_kartu(kartu(hitam, wild_draw_four), 20).
+nilai_kartu(kartu(hitam, mimic),          20).
 
 % mengambil kartu secara acak dari deck
 
@@ -61,7 +65,7 @@ bagikan_ke_semua([Pemain|Rest]) :-
     assertz(kartu_pemain(Pemain, TujuhKartu)),
     bagikan_ke_semua(Rest).
 
-% ambil N kartu secara acak (disimpan di Acc)
+% ambil N kartu secara acak
 ambil_kartu_acak(0, Acc, Acc) :- !.
 ambil_kartu_acak(N, Acc, Hasil) :-
     N > 0,
