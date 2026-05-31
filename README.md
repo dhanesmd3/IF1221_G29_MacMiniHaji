@@ -17,15 +17,15 @@ Program ini merupakan simulasi permainan kartu **UNI** berbasis *command line* y
 
 ## Cara Menjalankan Program
 
-Program dijalankan menggunakan **GNU Prolog (gprolog)**.
+Program dijalankan menggunakan **GNU Prolog (gprolog)**. Cukup memuat `main.pl`, karena berkas ini sudah meng-`include` seluruh modul permainan (`kartu.pl`, `state.pl`, `aksi.pl`, `pendukung.pl`) beserta seluruh modul bonus.
 
-```bash
-$ cd src
-$ gprolog --consult-file main.pl
+Buka GNU Prolog console, pilih menu **File → Consult...**, arahkan ke `src/main.pl`, lalu jalankan:
+
+```prolog
 | ?- startGame.
 ```
 
-`main.pl` akan memuat seluruh modul permainan (`kartu.pl`, `state.pl`, `aksi.pl`, `pendukung.pl`) beserta seluruh modul bonus. Setelah `startGame.`, program meminta jumlah pemain dan nama tiap pemain (ditulis sebagai atom diawali huruf kapital, contoh: `'Malik'`).
+Setiap perintah diakhiri tanda titik (`.`). Setelah `startGame.`, program meminta jumlah pemain dan nama tiap pemain (ditulis sebagai atom diawali huruf kapital, contoh: `'Malik'`).
 
 Contoh perintah selama permainan:
 
@@ -85,7 +85,6 @@ Contoh perintah selama permainan:
 │   └── bonus_mimic_card.pl           # Bonus: mimic card
 ├── doc/
 │   ├── Milestone1_G29.pdf            # Laporan Milestone 1
-│   ├── Milestone2_G29.pdf            # Laporan Milestone 2
-│   ├── Laporan_G29.pdf               # Laporan Akhir
+│   └── Milestone2_G29.pdf            # Laporan Milestone 2
 └── README.md
 ```
